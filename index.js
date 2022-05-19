@@ -1,15 +1,32 @@
 const data = new Date();
+console.log(data.getFullYear());
 
-console.log(data.getFullYear())
 
-const date1 = new Date('December 17, 1995 03:24:00');
-// Sun Dec 17 1995 03:24:00 GMT...
+const fs = require("fs/promises")
 
-const date2 = new Date('1995-12-17T03:24:00');
-// Sun Dec 17 1995 03:24:00 GMT...
-
-console.log(date1 === date2);
-// expected output: false;
-
-console.log(date1 - date2);
-// expected output: 0
+async function fileOperation(filePath, action="read", data="") {
+switch(action){
+  case "read":
+    const text = await fs.readFile(filePath, "utf8")
+    console.log(text)
+    break
+  case "add":
+    const result = await fs.appendFile(filePath, data)
+    console.log(result)
+    break
+  case "replase":
+    const res = await fs.writeFile(filePath, data)
+    console.log(res)
+    break
+  default:
+    console.log("unknown")
+  }}
+fileOperation("file.txt")
+fileOperation("file.txt", "add", "\ngammy gammy bear")
+fileOperation("file.txt", "replase", "\nAAAAAAAAAAAaaaaaa")
+// fs.readFile("file.txt", "utf8").then(data => {
+//   console.log(data)
+  // const text = data.toString()
+  // console.log(text)
+// }  
+//   ).catch(error => console.log(error.message))
