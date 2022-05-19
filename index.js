@@ -1,32 +1,47 @@
-const data = new Date();
-console.log(data.getFullYear());
+const fs = require("fs/promises");
+const contactsOperation = require("./contacts");
+const { program } = require("commander");
 
+const invokeContacts = async ({ action, id, name, email, phone }) => {
+  switch (action) {
+    case "list":
+      const allContacts = await contactsOperation.listContacts();
+      console.table(allContacts);
+      break;
+    case "get":
+      const contactsById = await contactsOperation.getContactById(id);
+      if (!contactsById) {
+        throw new Error(`Contacts by id: ${id} not found`);
+      }
+      console.log(contactsById);
+      break;
+    case "add":
+      const addContact = await contactsOperation.addContact(name, email, phone);
+      console.log(addContact);
+      break;
+    case "update":
+      const updateContactById = await contactsOperation.updateContact(id, data);
+      if (!updateContactById) {
+        throw new Error(`Contacts by id: ${id} not found`);
+      }
+      console.log(updateContactById);
+    case "remove":
+      const removeContact = await contactsOperation.removeContact(id);
+      console.log(removeContact);
+      break;
+    default:
+      console.warn("\x1B[31m Unknown action type!");
+  }
+};
 
-const fs = require("fs/promises")
+program
+  .option("-a, --action <type>", "contact operation")
+  .option("-i, --id <type>", "contact id")
+  .option("-n, --name <type>", "contact name")
+  .option("-e, --email <type>", "contact email")
+  .option("-p, --phone <type>", "contact phone");
 
-async function fileOperation(filePath, action="read", data="") {
-switch(action){
-  case "read":
-    const text = await fs.readFile(filePath, "utf8")
-    console.log(text)
-    break
-  case "add":
-    const result = await fs.appendFile(filePath, data)
-    console.log(result)
-    break
-  case "replase":
-    const res = await fs.writeFile(filePath, data)
-    console.log(res)
-    break
-  default:
-    console.log("unknown")
-  }}
-fileOperation("file.txt")
-fileOperation("file.txt", "add", "\ngammy gammy bear")
-fileOperation("file.txt", "replase", "\nAAAAAAAAAAAaaaaaa")
-// fs.readFile("file.txt", "utf8").then(data => {
-//   console.log(data)
-  // const text = data.toString()
-  // console.log(text)
-// }  
-//   ).catch(error => console.log(error.message))
+program.parse(process.argv);
+const options = program.opts();
+
+invokeContacts(options);

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index",
-    "start:dev": "nodemon index"    
+    "start:dev": "nodemon index"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,10 @@
   "homepage": "https://github.com/Mykola-Veres/nodejs-homework-1#readme",
   "devDependencies": {
     "nodemon": "^2.0.16"
+  },
+  "dependencies": {
+    "commander": "^9.2.0",
+    "uuid": "^8.3.2",
+    "yargs": "^17.5.1"
   }
 }
